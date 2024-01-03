@@ -6,48 +6,35 @@ import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 
 @Entity
-@Table(name = "Orders")
-public class Order extends PanacheEntityBase {
+@Table(name = "Customers")
+public class Customer extends PanacheEntityBase {
 
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
-    private UUID orderId;
-
-    @Column(columnDefinition = "uuid")
     public UUID customerId;
 
-    @Column(columnDefinition = "uuid")
-    public UUID specificationsId;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customerId", referencedColumnName = "customerId", insertable = false, updatable = false)
-    public Customer customer;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "specificationsId", referencedColumnName = "specificationsId", insertable = false, updatable = false)
-    public OrderSpecification specifications;
-
     @Column(length = 255)
-    private String status;
+    private String name;
+
+    @Column(columnDefinition = "jsonb")
+    private String contactDetails;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private OffsetDateTime createdAt;
 
-    @UpdateTimestamp
     @Column(nullable = false)
     private OffsetDateTime updatedAt;
 
     private UUID createdBy;
 
-    private UUID updatedBy;    
+    private UUID updatedBy;
 
     @PrePersist
     @PreUpdate
@@ -55,20 +42,20 @@ public class Order extends PanacheEntityBase {
         updatedAt = OffsetDateTime.now();
     }
 
-    public UUID getOrderId() {
-        return orderId;
+    public String getName() {
+        return name;
     }
 
-    public void setOrderId(UUID orderId) {
-        this.orderId = orderId;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getStatus() {
-        return status;
+    public String getContactDetails() {
+        return contactDetails;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setContactDetails(String contactDetails) {
+        this.contactDetails = contactDetails;
     }
 
     public OffsetDateTime getCreatedAt() {
@@ -102,5 +89,7 @@ public class Order extends PanacheEntityBase {
     public void setUpdatedBy(UUID updatedBy) {
         this.updatedBy = updatedBy;
     }
+
     
 }
+
