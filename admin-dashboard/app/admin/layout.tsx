@@ -13,8 +13,9 @@ export default function AdminLayout({
 }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <main className="grid grid-cols-2 items-center">
+      <main className="flex items-start">
         <ViewPrinters/>
+        <div className="divider divider-horizontal"></div>
         {children}
       </main>
     </QueryClientProvider>
