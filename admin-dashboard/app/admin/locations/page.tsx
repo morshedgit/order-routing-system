@@ -3,11 +3,11 @@
 
 import React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { API_BASE_URL } from "@/common/constants";
+import { API_PRINTER_URL } from "@/common/constants";
 import { LocationData } from "../add-location/page";
 
 const fetchLocations = async (): Promise<LocationData[]> => {
-  const response = await fetch(`${API_BASE_URL}/locations`);
+  const response = await fetch(`${API_PRINTER_URL}/locations`);
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
@@ -15,7 +15,7 @@ const fetchLocations = async (): Promise<LocationData[]> => {
 };
 
 const deleteLocation = async (id: string): Promise<void> => {
-  const response = await fetch(`${API_BASE_URL}/locations/${id}`, {
+  const response = await fetch(`${API_PRINTER_URL}/locations/${id}`, {
     method: "DELETE",
   });
   if (!response.ok) {

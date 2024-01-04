@@ -3,7 +3,7 @@
 
 import React, { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { API_BASE_URL } from "@/common/constants";
+import { API_PRINTER_URL } from "@/common/constants";
 
 // Define the type for your location data
 export interface LocationData {
@@ -36,7 +36,7 @@ const AddLocation: React.FC = () => {
   const addLocation = async (
     location: LocationData
   ): Promise<LocationResponse> => {
-    const response = await fetch(`${API_BASE_URL}/locations`, {
+    const response = await fetch(`${API_PRINTER_URL}/locations`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

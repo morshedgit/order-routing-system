@@ -3,7 +3,7 @@
 
 import React, { ChangeEvent, useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { API_BASE_URL } from "@/common/constants";
+import { API_PRINTER_URL } from "@/common/constants";
 import Autocomplete from "@/components/Autocomplete";
 import AddLocation from "./add-location/page";
 
@@ -20,7 +20,7 @@ interface PrinterError {
 // Assuming you have a function to fetch locations
 async function fetchLocations(): Promise<LocationData[]> {
   // Fetch locations from your API
-  const response = await fetch(`${API_BASE_URL}/locations`); // Adjust API endpoint as needed
+  const response = await fetch(`${API_PRINTER_URL}/locations`); // Adjust API endpoint as needed
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
@@ -30,7 +30,7 @@ async function fetchLocations(): Promise<LocationData[]> {
 // Assuming you have a function to submit printer data
 async function addPrinter(printerData: PrinterData): Promise<PrinterResponse> {
   // Submit printer data to your API
-  const response = await fetch(`${API_BASE_URL}/printers`, {
+  const response = await fetch(`${API_PRINTER_URL}/printers`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -128,7 +128,7 @@ const AddPrinter: React.FC = () => {
         <label className="label">
           <span className="label-text">Location</span>
         </label>
-        <div className="w-full flex">
+        <div className="w-full flex max-w-xs">
           <Autocomplete
             onSelect={onSelectLocation}
             suggestions={(locations || [])

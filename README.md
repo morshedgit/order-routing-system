@@ -3,19 +3,25 @@
 To structure the user experience of your print routing system, consider the following epics and user stories:
 
 ### Epics
+
 1. **Order Management**
+
    - Handling the entire lifecycle of print orders from creation to delivery.
 
 2. **Printer Management**
+
    - Managing printer partners, their capabilities, availability, and performance.
 
 3. **Assignment Logic**
+
    - Smart assignment of print orders to the most suitable printers based on various criteria.
 
 4. **Pricing and Cost Management**
+
    - Managing pricing models and cost estimation for orders.
 
 5. **Shipping and Logistics**
+
    - Handling shipping methods, delivery tracking, and logistics.
 
 6. **Dashboard and Reporting**
@@ -24,27 +30,34 @@ To structure the user experience of your print routing system, consider the foll
 ### User Stories
 
 #### Order Management Epic
+
 1. **As a customer**, I want to create a print order, so that I can have my documents printed.
 2. **As a customer**, I want to track the status of my print order, so that I know when to expect delivery.
 
 #### Printer Management Epic
+
 1. **As an admin**, I want to add new printer partners, so that I can expand the printing options.
 2. **As an admin**, I want to view printer performance, so that I can ensure quality service.
 
 #### Assignment Logic Epic
+
 1. **As an admin**, I want the system to automatically assign print orders to printers, so that orders are processed efficiently.
 
 #### Pricing and Cost Management Epic
+
 1. **As a customer**, I want to receive an estimated cost for my print order, so that I know how much I will be charged.
 
 #### Shipping and Logistics Epic
+
 1. **As a customer**, I want to select a shipping method for my order, so that I can choose the most convenient delivery option.
 
 #### Dashboard and Reporting Epic
+
 1. **As an admin**, I want to view all ongoing orders in a dashboard, so that I can monitor the system's activity.
 2. **As an admin**, I want to access performance reports, so that I can make informed decisions about the system.
 
 ### User Experience Flow
+
 - **Placing an Order**: A user logs in, creates an order with specifications, and receives a cost estimate. They select a shipping method and complete the order.
 - **Order Assignment and Processing**: The system automatically assigns the order to a suitable printer. The printer processes the order.
 - **Tracking and Updates**: The user tracks the order status through the dashboard. Updates on order progress are available.
@@ -52,7 +65,53 @@ To structure the user experience of your print routing system, consider the foll
 
 This structure provides a comprehensive view of the system's functionalities, focusing on the essential aspects of the service from both the customer's and the admin's perspectives.
 
+Certainly, assigning codes to the user stories will help streamline our discussions. Here are the stories with their respective codes:
+
+**Printer Management:**
+
+- PM1: As an admin, I want to add new printer partners.
+- PM2: As an admin, I want to view details of printer partners.
+
+**Order Creation:**
+
+- OC1: As a customer, I want to create a print order with specific requirements.
+
+**Pricing and Cost Estimation:**
+
+- PCE1: As a customer, I want to see an estimated cost for my print order.
+
+**Shipping Method Selection:**
+
+- SMS1: As a customer, I want to select a shipping method for my order.
+
+**Order Tracking:**
+
+- OT1: As a customer, I want to track the status of my print order.
+
+**Dashboard for Order Monitoring:**
+
+- DOM1: As an admin, I want to monitor ongoing orders in a dashboard.
+
+**Automatic Order Assignment:**
+
+- AOA1: As an admin, I want the system to automatically assign orders to printers.
+
+**Performance Reports and Analytics:**
+
+- PRA1: As an admin, I want to access performance reports of the print routing system.
+
+**Quality Assurance Feedback:**
+
+- QAF1: As a customer, I want to provide feedback on the print quality.
+
+**API Integration:**
+
+- API1: As a developer, I want to integrate external APIs for additional functionalities.
+
+Feel free to refer to these codes when discussing specific stories in the future!
+
 # Tables
+
 ```
 -- Order Management Domain
 CREATE TABLE Customers (

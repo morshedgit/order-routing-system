@@ -8,6 +8,7 @@ import io.quarkus.panache.common.Sort;
 import io.smallrye.mutiny.Uni;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.samyar.order.models.Order;
 
@@ -26,7 +27,7 @@ public class OrderResource {
 
     @GET
     @Path("{id}")
-    public Uni<Order> getById(Long id){
+    public Uni<Order> getById(UUID id){
         return Order.findById(id);
     }
     
@@ -41,7 +42,7 @@ public class OrderResource {
 
     @PUT
     @Path("{id}")
-    public Uni<Response> udpate(Long id, Order order){
+    public Uni<Response> udpate(UUID id, Order order){
         if(order == null){
             throw new WebApplicationException("Order is required", 422);
         };
@@ -55,7 +56,7 @@ public class OrderResource {
 
     @DELETE
     @Path("{id}")
-    public Uni<Response> delete(Long id){
+    public Uni<Response> delete(UUID id){
         return Panache
             .withTransaction(()->Order.deleteById(id)
             )
