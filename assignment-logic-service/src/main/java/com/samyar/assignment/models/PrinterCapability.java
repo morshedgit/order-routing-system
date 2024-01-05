@@ -1,4 +1,4 @@
-package com.samyar.printer.models;
+package com.samyar.assignment.models;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -10,27 +10,26 @@ import org.hibernate.annotations.UpdateTimestamp;
 import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = "PrinterCapabilities")
-public class PrinterCapability extends PanacheEntityBase {
 
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+public class PrinterCapability  {
+
     public UUID capabilityId;
 
-    @Column(length = 255)
+    
+    public UUID printerId;
+
+    
+    public Printer printer;
+
+    
     public String printType;
 
     public int volumeCapacity;
 
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    
     public OffsetDateTime createdAt;
 
-    @UpdateTimestamp
-    @Column(nullable = false)
+    
     public OffsetDateTime updatedAt;
 
     public UUID createdBy;
@@ -43,6 +42,22 @@ public class PrinterCapability extends PanacheEntityBase {
 
     public void setCapabilityId(UUID capabilityId) {
         this.capabilityId = capabilityId;
+    }
+
+    public UUID getPrinterId() {
+        return printerId;
+    }
+
+    public void setPrinterId(UUID printerId) {
+        this.printerId = printerId;
+    }
+
+    public Printer getPrinter() {
+        return printer;
+    }
+
+    public void setPrinter(Printer printer) {
+        this.printer = printer;
     }
 
     public String getPrintType() {

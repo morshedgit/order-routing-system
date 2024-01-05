@@ -1,11 +1,14 @@
 package com.samyar.order.api;
 
+import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import io.quarkus.hibernate.reactive.panache.Panache;
 import io.quarkus.panache.common.Sort;
 import io.smallrye.mutiny.Uni;
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,6 +23,11 @@ import static jakarta.ws.rs.core.Response.Status.NO_CONTENT;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class OrderResource {
+
+    @Inject
+    @Channel("orders-out")
+    Emitter<Order> orderEmitter;
+    
     @GET
     public Uni<List<Order>> get() {
         return Order.listAll(Sort.by("createdAt"));
@@ -32,12 +40,14 @@ public class OrderResource {
     }
     
     @POST
-    public Uni<Response> create(Order order){
-        if(order == null ){
-            throw new WebApplicationException("Id was invalidly set on request.",422);
+    public Uni<Response> create(Order order) {
+        if (order == null) {
+            throw new WebApplicationException("Order should not be null.", 422);
         }
-        return Panache.withTransaction(order::persist)
-            .replaceWith(Response.ok(order).status(CREATED)::build);
+
+        return Panache.withTransaction(() -> order.persist())
+            .onItem().invoke(() -> orderEmitter.send(order))
+            .replaceWith(() -> Response.ok(order).status(Response.Status.CREATED).build());
     }
 
     @PUT

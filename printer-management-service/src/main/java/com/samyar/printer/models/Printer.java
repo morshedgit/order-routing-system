@@ -30,6 +30,31 @@ public class Printer extends PanacheEntityBase {
     @JoinColumn(name = "locationId", referencedColumnName = "locationId", insertable = false, updatable = false)
     public Location location;
 
+    
+
+    @Column(columnDefinition = "uuid")
+    public UUID capabilityId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "capabilityId", referencedColumnName = "capabilityId", insertable = false, updatable = false)
+    public PrinterCapability capibility;
+
+    public UUID getCapibilityId() {
+        return capabilityId;
+    }
+
+    public void setCapibilityId(UUID capabilityId) {
+        this.capabilityId = capabilityId;
+    }
+
+    public PrinterCapability getCapibility() {
+        return capibility;
+    }
+
+    public void setCapibility(PrinterCapability capibility) {
+        this.capibility = capibility;
+    }
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     public OffsetDateTime createdAt;

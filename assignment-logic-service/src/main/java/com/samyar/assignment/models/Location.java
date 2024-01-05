@@ -1,5 +1,6 @@
-package com.samyar.printer.models;
+package com.samyar.assignment.models;
 
+import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -8,57 +9,44 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
-import jakarta.persistence.*;
 
-@Entity
-@Table(name = "PrinterCapabilities")
-public class PrinterCapability extends PanacheEntityBase {
+public class Location {
+    public UUID locationId;
 
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
-    public UUID capabilityId;
+    public String address;
 
-    @Column(length = 255)
-    public String printType;
-
-    public int volumeCapacity;
-
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    public String city;
+    
     public OffsetDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(nullable = false)
+    
     public OffsetDateTime updatedAt;
 
     public UUID createdBy;
 
     public UUID updatedBy;
 
-    public UUID getCapabilityId() {
-        return capabilityId;
+    public UUID getLocationId() {
+        return locationId;
     }
 
-    public void setCapabilityId(UUID capabilityId) {
-        this.capabilityId = capabilityId;
+    public void setLocationId(UUID locationId) {
+        this.locationId = locationId;
     }
 
-    public String getPrintType() {
-        return printType;
+    public String getAddress() {
+        return address;
     }
 
-    public void setPrintType(String printType) {
-        this.printType = printType;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public int getVolumeCapacity() {
-        return volumeCapacity;
+    public String getCity() {
+        return city;
     }
 
-    public void setVolumeCapacity(int volumeCapacity) {
-        this.volumeCapacity = volumeCapacity;
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public OffsetDateTime getCreatedAt() {
@@ -92,7 +80,5 @@ public class PrinterCapability extends PanacheEntityBase {
     public void setUpdatedBy(UUID updatedBy) {
         this.updatedBy = updatedBy;
     }
-
-    // Getters and Setters
     
 }

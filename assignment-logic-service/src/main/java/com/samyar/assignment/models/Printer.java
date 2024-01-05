@@ -1,4 +1,4 @@
-package com.samyar.printer.models;
+package com.samyar.assignment.models;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -10,55 +10,54 @@ import org.hibernate.annotations.UpdateTimestamp;
 import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = "PrinterCapabilities")
-public class PrinterCapability extends PanacheEntityBase {
+public class Printer {
 
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
-    public UUID capabilityId;
+    public UUID printerId;
 
-    @Column(length = 255)
-    public String printType;
+    public String name;
 
-    public int volumeCapacity;
+    public UUID locationId;
 
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    public Location location;
+
     public OffsetDateTime createdAt;
 
-    @UpdateTimestamp
-    @Column(nullable = false)
     public OffsetDateTime updatedAt;
 
     public UUID createdBy;
 
     public UUID updatedBy;
 
-    public UUID getCapabilityId() {
-        return capabilityId;
+    public UUID getPrinterId() {
+        return printerId;
     }
 
-    public void setCapabilityId(UUID capabilityId) {
-        this.capabilityId = capabilityId;
+    public void setPrinterId(UUID printerId) {
+        this.printerId = printerId;
     }
 
-    public String getPrintType() {
-        return printType;
+    public String getName() {
+        return name;
     }
 
-    public void setPrintType(String printType) {
-        this.printType = printType;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getVolumeCapacity() {
-        return volumeCapacity;
+    public UUID getLocationId() {
+        return locationId;
     }
 
-    public void setVolumeCapacity(int volumeCapacity) {
-        this.volumeCapacity = volumeCapacity;
+    public void setLocationId(UUID locationId) {
+        this.locationId = locationId;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public OffsetDateTime getCreatedAt() {
@@ -96,3 +95,4 @@ public class PrinterCapability extends PanacheEntityBase {
     // Getters and Setters
     
 }
+
