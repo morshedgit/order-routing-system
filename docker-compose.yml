@@ -14,7 +14,7 @@ services:
     environment:
       - KAFKA_BROKER_ID=1
       - KAFKA_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
     depends_on:
@@ -26,6 +26,20 @@ services:
       dockerfile: assignment-logic-service/src/main/docker/Dockerfile.jvm
     ports:
       - "8080:8080"
+    environment:
+      - JAVA_OPTS_APPEND=-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager
+    # Uncomment the following lines if you need live code updates without rebuilding the container
+    # volumes:
+    #   - ./src:/deployments/src
+    depends_on:
+      - kafka
+
+  order-service:
+    build:
+      context: .
+      dockerfile: order-management-service/src/main/docker/Dockerfile.jvm
+    ports:
+      - "8082:8082"
     environment:
       - JAVA_OPTS_APPEND=-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager
     # Uncomment the following lines if you need live code updates without rebuilding the container
