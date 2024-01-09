@@ -11,7 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 
 @Entity
-@Table(name = "Locations")
+@Table(name = "Locations", schema="printers")
 public class Location extends PanacheEntityBase {
 
     @Id

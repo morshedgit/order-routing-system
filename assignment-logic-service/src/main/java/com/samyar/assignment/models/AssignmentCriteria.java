@@ -15,7 +15,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 
 @Entity
-@Table(name = "AssignmentCriteria")
+@Table(name = "AssignmentCriteria", schema = "assignments")
 public class AssignmentCriteria extends PanacheEntityBase {
 
     @Id

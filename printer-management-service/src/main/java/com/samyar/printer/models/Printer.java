@@ -11,7 +11,7 @@ import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Printers")
+@Table(name = "Printers", schema="printers")
 public class Printer extends PanacheEntityBase {
 
     @Id

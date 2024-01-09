@@ -32,19 +32,27 @@ services:
       - postgres-data:/var/lib/postgresql/data
       - ./db:/docker-entrypoint-initdb.d
 
-  # assignment-service:
-  #   build:
-  #     context: .
-  #     dockerfile: assignment-logic-service/src/main/docker/Dockerfile.jvm
-  #   ports:
-  #     - "8080:8080"
-  #   environment:
-  #     - JAVA_OPTS_APPEND=-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager
-  #   # Uncomment the following lines if you need live code updates without rebuilding the container
-  #   # volumes:
-  #   #   - ./src:/deployments/src
-  #   depends_on:
-  #     - kafka
+  admin:
+    image: adminer
+    restart: always
+    depends_on:
+      - postgres-db
+    ports:
+      - 8070:8080
+
+  assignment-service:
+    build:
+      context: .
+      dockerfile: assignment-logic-service/src/main/docker/Dockerfile.jvm
+    ports:
+      - "8084:8084"
+    environment:
+      - JAVA_OPTS_APPEND=-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager
+    # Uncomment the following lines if you need live code updates without rebuilding the container
+    # volumes:
+    #   - ./src:/deployments/src
+    depends_on:
+      - kafka
 
   order-service:
     build:
@@ -52,6 +60,20 @@ services:
       dockerfile: order-management-service/src/main/docker/Dockerfile.jvm
     ports:
       - "8082:8082"
+    environment:
+      - JAVA_OPTS_APPEND=-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager
+    # Uncomment the following lines if you need live code updates without rebuilding the container
+    # volumes:
+    #   - ./src:/deployments/src
+    depends_on:
+      - kafka
+
+  printer-service:
+    build:
+      context: .
+      dockerfile: printer-management-service/src/main/docker/Dockerfile.jvm
+    ports:
+      - "8083:8083"
     environment:
       - JAVA_OPTS_APPEND=-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager
     # Uncomment the following lines if you need live code updates without rebuilding the container

@@ -10,7 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 
 @Entity
-@Table(name = "Customers")
+@Table(name = "Customers", schema="orders")
 public class Customer extends PanacheEntityBase {
 
     @Id
