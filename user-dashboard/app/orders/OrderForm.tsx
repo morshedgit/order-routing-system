@@ -33,7 +33,7 @@ async function fetchOrderSpecifications(): Promise<OrderSpecification[]> {
   return response.json();
 }
 
-const AddOrder: React.FC = () => {
+const OrderForm: React.FC = () => {
   const { data: orderSpecifications, isLoading } = useQuery<
     OrderSpecification[]
   >({
@@ -128,4 +128,4 @@ const AddOrder: React.FC = () => {
   );
 };
 
-export default AddOrder;
+export default OrderForm;

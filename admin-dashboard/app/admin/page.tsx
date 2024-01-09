@@ -6,6 +6,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { API_PRINTER_URL } from "@/common/constants";
 import Autocomplete from "@/components/Autocomplete";
 import AddLocation from "./add-location/page";
+import AddPrinterCapability, {
+  PrinterCapabilityData,
+} from "./add-printer-capability/page";
 
 // Define the type for the response data
 interface PrinterResponse {
@@ -17,10 +20,18 @@ interface PrinterError {
   message: string;
 }
 
-// Assuming you have a function to fetch locations
 async function fetchLocations(): Promise<LocationData[]> {
   // Fetch locations from your API
   const response = await fetch(`${API_PRINTER_URL}/locations`); // Adjust API endpoint as needed
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+}
+
+async function fetchPrinterCapabilities(): Promise<PrinterCapabilityData[]> {
+  // Fetch locations from your API
+  const response = await fetch(`${API_PRINTER_URL}/printer-capabilities`); // Adjust API endpoint as needed
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
@@ -46,6 +57,7 @@ async function addPrinter(printerData: PrinterData): Promise<PrinterResponse> {
 interface PrinterData {
   name: string;
   locationId: string;
+  capabilityId: string;
 }
 
 interface LocationData {
@@ -57,16 +69,26 @@ interface LocationData {
 }
 
 const AddPrinter: React.FC = () => {
-  const modalRef = useRef<HTMLDialogElement>(null);
+  const localtionModalRef = useRef<HTMLDialogElement>(null);
+  const capabilityModalRef = useRef<HTMLDialogElement>(null);
   const [printerData, setPrinterData] = useState<PrinterData>({
     name: "",
     locationId: "",
+    capabilityId: "",
   });
-  const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
+  const [selectedLocationId, setSelectedLocationId] = useState<string | null>(
+    null
+  );
+  const [selectedPrinterCapabilityId, setSelectedPrinterCapabilityId] =
+    useState<string | null>(null);
 
   const { data: locations, isLoading } = useQuery<LocationData[]>({
     queryKey: ["locations"],
     queryFn: fetchLocations,
+  });
+  const { data: printerCapabilities } = useQuery<PrinterCapabilityData[]>({
+    queryKey: ["printer-capabilities"],
+    queryFn: fetchPrinterCapabilities,
   });
 
   const queryClient = useQueryClient();
@@ -92,19 +114,28 @@ const AddPrinter: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (selectedLocation) {
-      printerMutation.mutate({
-        ...printerData,
-        locationId: selectedLocation,
-      });
-    } else {
+    if (!selectedLocationId) {
       alert("Location is required");
+      return;
     }
+    if (!selectedPrinterCapabilityId) {
+      alert("Printer Capability is required");
+      return;
+    }
+
+    printerMutation.mutate({
+      ...printerData,
+      locationId: selectedLocationId,
+      capabilityId: selectedPrinterCapabilityId,
+    });
   };
 
   const onSelectLocation = (key: string) => {
     const locationId = key;
-    setSelectedLocation(locationId);
+    setSelectedLocationId(locationId);
+  };
+  const onSelectPrinterCapability = (key: string) => {
+    setSelectedPrinterCapabilityId(key);
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -141,7 +172,29 @@ const AddPrinter: React.FC = () => {
           <button
             type="button"
             className="btn"
-            onClick={() => modalRef.current?.showModal()}
+            onClick={() => localtionModalRef.current?.showModal()}
+          >
+            +
+          </button>
+        </div>
+
+        <label className="label">
+          <span className="label-text">Printer Capability</span>
+        </label>
+        <div className="w-full flex max-w-xs">
+          <Autocomplete
+            onSelect={onSelectPrinterCapability}
+            suggestions={(printerCapabilities || [])
+              ?.filter((printerCapability) => printerCapability.capabilityId)
+              .map((printerCapability) => ({
+                key: printerCapability.capabilityId!,
+                label: `${printerCapability.printType}, ${printerCapability.volumeCapacity}`,
+              }))}
+          />
+          <button
+            type="button"
+            className="btn"
+            onClick={() => capabilityModalRef.current?.showModal()}
           >
             +
           </button>
@@ -151,9 +204,24 @@ const AddPrinter: React.FC = () => {
           Add Printer
         </button>
       </form>
-      <dialog id="add_location_modal" className="modal" ref={modalRef}>
+      <dialog id="add_location_modal" className="modal" ref={localtionModalRef}>
         <div className="bg-white p-4 rounded-sm relative">
           <AddLocation />
+          <div className="modal-action">
+            <form method="dialog">
+              <button className="btn absolute top-1 right-1">x</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
+
+      <dialog
+        id="add_location_modal"
+        className="modal"
+        ref={capabilityModalRef}
+      >
+        <div className="bg-white p-4 rounded-sm relative">
+          <AddPrinterCapability />
           <div className="modal-action">
             <form method="dialog">
               <button className="btn absolute top-1 right-1">x</button>

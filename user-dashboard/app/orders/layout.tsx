@@ -1,6 +1,7 @@
 "use client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ViewOrders from "./ViewOrders";
+import Link from "next/link";
 
 const queryClient = new QueryClient();
 
@@ -11,7 +12,13 @@ export default function AdminLayout({
 }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <main className="flex items-start">
+      <header className="w-full flex p-4 border-b-solid border-b-2">
+        <Link href="/">Home</Link>
+        <div className="flex-grow flex justify-end">
+          <Link href="/">Login</Link>
+        </div>
+      </header>
+      <main className="w-full max-w-3xl flex items-start">
         <ViewOrders />
         <div className="divider divider-horizontal"></div>
         {children}
