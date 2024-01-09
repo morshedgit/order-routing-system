@@ -5,6 +5,7 @@ import React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { API_ORDER_URL } from "@/common/constants";
 import { OrderSpecification } from "./order-specifications/page";
+import Link from "next/link";
 
 interface Order {
   orderId: string;
@@ -62,11 +63,11 @@ const ViewOrders = () => {
       <ul className="list-disc">
         {orders?.map((order) => (
           <li key={order.orderId} className="flex justify-between my-2">
-            <span>
-              <span className="font-semibold">
+            <Link href={`/orders/${order.orderId}`} className="flex-grow">
+              <div className="font-semibold">
                 {order.specifications.paperType}
-              </span>
-            </span>
+              </div>
+            </Link>
             <button
               onClick={() => deleteMutation.mutate(order.orderId)}
               className="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"

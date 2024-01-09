@@ -13,13 +13,15 @@ export default function AdminLayout({
   return (
     <QueryClientProvider client={queryClient}>
       <header className="w-full flex p-4 border-b-solid border-b-2">
-        <Link href="/">Home</Link>
+        <Link href="/orders">Home</Link>
         <div className="flex-grow flex justify-end">
           <Link href="/">Login</Link>
         </div>
       </header>
       <main className="w-full max-w-3xl flex items-start">
-        <ViewOrders />
+        <div className="min-w-64">
+          <ViewOrders />
+        </div>
         <div className="divider divider-horizontal"></div>
         {children}
       </main>

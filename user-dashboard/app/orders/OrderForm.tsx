@@ -8,7 +8,7 @@ import Autocomplete from "@/components/Autocomplete";
 import { OrderSpecification } from "./order-specifications/page";
 import AddOrderSpecifications from "./add-order-specification/page";
 
-const CUSTOMER_ID = "de7b40cc-79dd-426e-a0fb-1e74bc750c61";
+const CUSTOMER_ID = "2d74d163-b627-41c8-9a18-76f6d8c3f998";
 
 interface OrderResponse {
   message: string;
@@ -33,6 +33,20 @@ async function fetchOrderSpecifications(): Promise<OrderSpecification[]> {
   return response.json();
 }
 
+const addOrder = async (order: OrderData): Promise<OrderResponse> => {
+  const response = await fetch(`${API_ORDER_URL}/orders`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(order),
+  });
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+};
+
 const OrderForm: React.FC = () => {
   const { data: orderSpecifications, isLoading } = useQuery<
     OrderSpecification[]
@@ -49,20 +63,6 @@ const OrderForm: React.FC = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
 
   const queryClient = useQueryClient();
-
-  const addOrder = async (order: OrderData): Promise<OrderResponse> => {
-    const response = await fetch(`${API_ORDER_URL}/orders`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(order),
-    });
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    return response.json();
-  };
 
   const orderMutation = useMutation<OrderResponse, OrderError, OrderData>({
     mutationFn: addOrder,

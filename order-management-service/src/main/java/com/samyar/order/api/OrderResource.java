@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.UUID;
 
 import com.samyar.order.models.Order;
+import com.samyar.order.models.OrderProgress;
+import com.samyar.order.services.OrderProgressService;
 
 import static jakarta.ws.rs.core.Response.Status.CREATED;
 import static jakarta.ws.rs.core.Response.Status.NOT_FOUND;
@@ -27,6 +29,9 @@ public class OrderResource {
     @Inject
     @Channel("orders-out")
     Emitter<Order> orderEmitter;
+
+    @Inject
+    OrderProgressService orderProgressService;
     
     @GET
     public Uni<List<Order>> get() {
@@ -37,6 +42,12 @@ public class OrderResource {
     @Path("{id}")
     public Uni<Order> getById(UUID id){
         return Order.findById(id);
+    }
+
+    @GET
+    @Path("{id}/order-progress")
+    public Uni<OrderProgress> getOrderProgressById(UUID id){
+        return orderProgressService.getOrderProgressByOrderId(id);
     }
     
     @POST
