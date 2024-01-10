@@ -11,6 +11,7 @@ import com.samyar.order.models.Order;
 import com.samyar.order.models.OrderProgress;
 import com.samyar.order.models.Printer;
 
+import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -26,7 +27,6 @@ public class OrderProgressService {
     @RestClient
     PrinterService printerService;
     
-
     public Uni<OrderProgress> getOrderProgressByOrderId(UUID orderId){
 
         OrderProgress orderProgress = new OrderProgress();
@@ -35,17 +35,24 @@ public class OrderProgressService {
 
         return orderUni
         .onItem().transformToUni((Order order) -> {
+            System.out.println("Order Id: "+order.getOrderId());
             orderProgress.setOrder(order);
             Uni<Assignment> assUni = assignmentService.getAssignment(order.getOrderId());
             return assUni;
             
         }).onItem().transformToUni((Assignment assignment) -> {
+
+            System.out.println("Assignment Id: "+assignment.getAssignmentId());
             Uni<Printer> pUni = printerService.getPrinter(assignment.getPrinterId());
             return pUni;
         }).onItem().transformToUni((Printer printer) -> {
-                orderProgress.setPrinter(printer);
-                return Uni.createFrom().item(orderProgress);
-        }).onFailure().recoverWithItem(th->orderProgress);
+            System.out.println("printer Id: "+printer.getPrinterId());
+            orderProgress.setPrinter(printer);
+            return Uni.createFrom().item(orderProgress);
+        }).onFailure().recoverWithItem(th->{
+            System.out.println("Error Message: "+ th.getMessage());
+            return orderProgress;
+        });
     }    
     
 }

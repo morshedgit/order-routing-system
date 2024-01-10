@@ -1,6 +1,5 @@
 // pages/customer/add-order.tsx
 "use client";
-
 import React, { useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { API_ORDER_URL } from "@/common/constants";
@@ -8,10 +7,11 @@ import Autocomplete from "@/components/Autocomplete";
 import { OrderSpecification } from "./order-specifications/page";
 import AddOrderSpecifications from "./add-order-specification/page";
 
-const CUSTOMER_ID = "2d74d163-b627-41c8-9a18-76f6d8c3f998";
+const CUSTOMER_ID = "73b83a20-f6fd-4c69-9a4e-5fdea5abf152";
 
 interface OrderResponse {
   message: string;
+  orderId: string;
 }
 
 interface OrderError {
@@ -44,7 +44,8 @@ const addOrder = async (order: OrderData): Promise<OrderResponse> => {
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
-  return response.json();
+  const result = await response.json();
+  return result;
 };
 
 const OrderForm: React.FC = () => {
@@ -67,9 +68,11 @@ const OrderForm: React.FC = () => {
   const orderMutation = useMutation<OrderResponse, OrderError, OrderData>({
     mutationFn: addOrder,
     onSuccess: (data) => {
-      console.log("Order added successfully:", data.message);
+      console.log("Order added successfully:", data);
       // Perform any additional actions on
       queryClient.invalidateQueries({ queryKey: ["orders"] });
+
+      window.location.assign(`/orders/${data.orderId}`);
     },
     onError: (error) => {
       console.error("Error adding order:", error.message);
