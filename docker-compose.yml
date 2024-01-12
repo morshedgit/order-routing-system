@@ -59,6 +59,7 @@ services:
     #   - ./src:/deployments/src
     depends_on:
       - kafka
+      - postgres-db
 
   order-service:
     build:
@@ -72,6 +73,7 @@ services:
     #   - ./src:/deployments/src
     depends_on:
       - kafka
+      - postgres-db
 
   printer-service:
     build:
@@ -85,6 +87,7 @@ services:
     #   - ./src:/deployments/src
     depends_on:
       - kafka
+      - postgres-db
 
 volumes:
   postgres-data:
