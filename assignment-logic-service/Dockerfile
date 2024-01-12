@@ -10,17 +10,15 @@ RUN mvn dependency:go-offline -B
 # Copy the source code
 COPY ./src ./src
 
-RUN mvn clean package
-
-RUN ls -l /project/target > /project/target_ls_output.txt && cat /project/target_ls_output.txt
+# Build the application
+RUN mvn clean package \
+    # Then move the artifacts from target/quarkus-app to /deployments
+    && mv target/quarkus-app/lib/ /deployments/lib/ \
+    && mv target/quarkus-app/*.jar /deployments/ \
+    && mv target/quarkus-app/app/ /deployments/app/ \
+    && mv target/quarkus-app/quarkus/ /deployments/quarkus/
 
 ENV LANGUAGE='en_US:en'
-
-# We make four distinct layers so if there are application changes the library layers can be re-used
-COPY --chown=185 target/quarkus-app/lib/ /deployments/lib/
-COPY --chown=185 target/quarkus-app/*.jar /deployments/
-COPY --chown=185 target/quarkus-app/app/ /deployments/app/
-COPY --chown=185 target/quarkus-app/quarkus/ /deployments/quarkus/
 
 EXPOSE 8084
 USER 185
