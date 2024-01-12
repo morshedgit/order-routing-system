@@ -1,5 +1,5 @@
 # Stage 1: Build the application with Maven and Docker (Docker-in-Docker)
-FROM registry.access.redhat.com/ubi8/openjdk-21 as build
+FROM registry.access.redhat.com/ubi8/openjdk-21
 
 WORKDIR /project
 
@@ -10,20 +10,17 @@ RUN mvn dependency:go-offline -B
 # Copy the source code
 COPY ./src ./src
 
-RUN mvn package
+RUN mvn clean package
 
 RUN ls -l /project/target > /project/target_ls_output.txt && cat /project/target_ls_output.txt
-
-# Stage 2: Create the runtime image
-FROM registry.access.redhat.com/ubi8/openjdk-21
 
 ENV LANGUAGE='en_US:en'
 
 # We make four distinct layers so if there are application changes the library layers can be re-used
-COPY --from=build --chown=185 project/target/quarkus-app/lib/ /deployments/lib/
-COPY --from=build --chown=185 project/target/quarkus-app/*.jar /deployments/
-COPY --from=build --chown=185 project/target/quarkus-app/app/ /deployments/app/
-COPY --from=build --chown=185 project/target/quarkus-app/quarkus/ /deployments/quarkus/
+COPY --chown=185 target/quarkus-app/lib/ /deployments/lib/
+COPY --chown=185 target/quarkus-app/*.jar /deployments/
+COPY --chown=185 target/quarkus-app/app/ /deployments/app/
+COPY --chown=185 target/quarkus-app/quarkus/ /deployments/quarkus/
 
 EXPOSE 8084
 USER 185

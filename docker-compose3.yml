@@ -49,8 +49,8 @@ services:
 
   assignment-service:
     build:
-      context: ./assignment-logic-service
-      # dockerfile: assignment-logic-service/Dockerfile
+      context: .
+      dockerfile: assignment-logic-service/src/main/docker/Dockerfile.jvm
     ports:
       - "8084:8084"
     environment:
@@ -63,8 +63,8 @@ services:
 
   order-service:
     build:
-      context: ./order-management-service
-      # dockerfile: order-management-service/Dockerfile
+      context: .
+      dockerfile: order-management-service/src/main/docker/Dockerfile.jvm
     ports:
       - "8082:8082"
     environment:
@@ -77,8 +77,8 @@ services:
 
   printer-service:
     build:
-      context: ./printer-management-service
-      # dockerfile: printer-management-service/Dockerfile
+      context: .
+      dockerfile: printer-management-service/src/main/docker/Dockerfile.jvm
     ports:
       - "8083:8083"
     environment:
