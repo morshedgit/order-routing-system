@@ -5,7 +5,7 @@ import OrderProgressComponent from "./OrderProgressComponent";
 
 export interface OrderProgress {
   orderId: string;
-  order: Order;
+  order?: Order;
   printer?: Printer;
 }
 

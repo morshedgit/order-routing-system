@@ -7,7 +7,7 @@ import Autocomplete from "@/components/Autocomplete";
 import { OrderSpecification } from "./order-specifications/page";
 import AddOrderSpecifications from "./add-order-specification/page";
 
-const CUSTOMER_ID = "73b83a20-f6fd-4c69-9a4e-5fdea5abf152";
+const CUSTOMER_ID = "4a8737bc-beb4-4f27-87d9-8f804d6538d2";
 
 interface OrderResponse {
   message: string;
