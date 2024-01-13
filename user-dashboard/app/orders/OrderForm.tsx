@@ -5,9 +5,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { API_ORDER_URL } from "@/common/constants";
 import Autocomplete from "@/components/Autocomplete";
 import { OrderSpecification } from "./order-specifications/page";
-import AddOrderSpecifications from "./add-order-specification/page";
+import { SpecificationForm } from "./add-order-specification/add-specification-form";
+// import AddOrderSpecifications from "./add-order-specification/page";
 
-const CUSTOMER_ID = "4a8737bc-beb4-4f27-87d9-8f804d6538d2";
+const CUSTOMER_ID = "d79e39b8-e631-4591-aab0-ddfdbb52b3e9";
 
 interface OrderResponse {
   message: string;
@@ -118,8 +119,10 @@ const OrderForm: React.FC = () => {
         </button>
       </form>
       <dialog id="add_location_modal" className="modal" ref={modalRef}>
-        <div className="bg-white p-4 rounded-sm relative">
-          <AddOrderSpecifications />
+        <div className="p-4 rounded-sm relative">
+          {/* <AddOrderSpecifications /> */}
+          <SpecificationForm />
+
           <div className="modal-action">
             <form method="dialog">
               <button className="btn absolute top-1 right-1">x</button>

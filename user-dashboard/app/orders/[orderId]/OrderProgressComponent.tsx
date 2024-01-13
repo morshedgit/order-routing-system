@@ -1,18 +1,42 @@
 import React from "react";
 import { OrderProgress } from "./page";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { API_ORDER_URL } from "@/common/constants";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
 
-// ... other interfaces
-
-// The component
+const deleteOrder = async (id: string): Promise<void> => {
+  const response = await fetch(`${API_ORDER_URL}/orders/${id}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+};
 const OrderProgressComponent: React.FC<{ orderProgress: OrderProgress }> = ({
   orderProgress,
 }) => {
+  const queryClient = useQueryClient();
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteOrder,
+    onSuccess: () => {
+      console.log("Order deleted successfully");
+      // Refetch orders after a successful deletion
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+    },
+  });
   return (
-    <article className="p-4 rounded-lg shadow-md">
-      <header className="mb-2">
+    <Card>
+      <CardHeader className="mb-2">
         <h2 className="text-lg font-semibold">Order Progress</h2>
-      </header>
-      <section>
+      </CardHeader>
+      <CardContent>
         <p>
           <strong>Order ID:</strong> {orderProgress.orderId}
         </p>
@@ -29,8 +53,17 @@ const OrderProgressComponent: React.FC<{ orderProgress: OrderProgress }> = ({
           {orderProgress.printer?.name}
           (Location: {orderProgress.printer?.location.city})
         </p>
-      </section>
-    </article>
+      </CardContent>
+
+      <CardFooter>
+        <Button
+          variant="destructive"
+          onClick={() => deleteMutation.mutate(orderProgress.orderId)}
+        >
+          Delete
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };
 
