@@ -1,14 +1,44 @@
 // pages/admin/add-printer.tsx
 "use client";
 
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { API_PRINTER_URL } from "@/common/constants";
-import Autocomplete from "@/components/Autocomplete";
-import AddLocation from "./add-location/page";
-import AddPrinterCapability, {
+import PrinterCapabilityForm, {
   PrinterCapabilityData,
 } from "./add-printer-capability/page";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import LocationForm from "./add-location/location-form";
 
 // Define the type for the response data
 interface PrinterResponse {
@@ -19,6 +49,11 @@ interface PrinterResponse {
 interface PrinterError {
   message: string;
 }
+const formSchema = z.object({
+  name: z.string().min(2).max(50),
+  locationId: z.string().min(2).max(50),
+  capabilityId: z.string().min(2).max(50),
+});
 
 async function fetchLocations(): Promise<LocationData[]> {
   // Fetch locations from your API
@@ -69,18 +104,14 @@ interface LocationData {
 }
 
 const AddPrinter: React.FC = () => {
-  const localtionModalRef = useRef<HTMLDialogElement>(null);
-  const capabilityModalRef = useRef<HTMLDialogElement>(null);
-  const [printerData, setPrinterData] = useState<PrinterData>({
-    name: "",
-    locationId: "",
-    capabilityId: "",
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      locationId: "",
+      capabilityId: "",
+    },
   });
-  const [selectedLocationId, setSelectedLocationId] = useState<string | null>(
-    null
-  );
-  const [selectedPrinterCapabilityId, setSelectedPrinterCapabilityId] =
-    useState<string | null>(null);
 
   const { data: locations, isLoading } = useQuery<LocationData[]>({
     queryKey: ["locations"],
@@ -112,123 +143,113 @@ const AddPrinter: React.FC = () => {
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedLocationId) {
-      alert("Location is required");
-      return;
-    }
-    if (!selectedPrinterCapabilityId) {
-      alert("Printer Capability is required");
-      return;
-    }
+  // 2. Define a submit handler.
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    printerMutation.mutate(values);
+  }
 
-    printerMutation.mutate({
-      ...printerData,
-      locationId: selectedLocationId,
-      capabilityId: selectedPrinterCapabilityId,
-    });
-  };
-
-  const onSelectLocation = (key: string) => {
-    const locationId = key;
-    setSelectedLocationId(locationId);
-  };
-  const onSelectPrinterCapability = (key: string) => {
-    setSelectedPrinterCapabilityId(key);
-  };
+  const [selectedForm, setSelectedForm] = useState<
+    "location" | "cap" | undefined
+  >();
 
   if (isLoading) return <div>Loading...</div>;
 
   return (
     <>
-      <form className="form-control w-full max-w-xs" onSubmit={handleSubmit}>
-        <label className="label">
-          <span className="label-text">Printer Name</span>
-        </label>
-        <input
-          type="text"
-          placeholder="Name"
-          className="input input-bordered w-full max-w-xs"
-          value={printerData.name}
-          onChange={(e) =>
-            setPrinterData({ ...printerData, name: e.target.value })
-          }
-        />
-
-        <label className="label">
-          <span className="label-text">Location</span>
-        </label>
-        <div className="w-full flex max-w-xs">
-          <Autocomplete
-            onSelect={onSelectLocation}
-            suggestions={(locations || [])
-              ?.filter((location) => location.locationId)
-              .map((location) => ({
-                key: location.locationId!,
-                label: `${location.address}, ${location.city}`,
-              }))}
-          />
-          <button
-            type="button"
-            className="btn"
-            onClick={() => localtionModalRef.current?.showModal()}
-          >
-            +
-          </button>
-        </div>
-
-        <label className="label">
-          <span className="label-text">Printer Capability</span>
-        </label>
-        <div className="w-full flex max-w-xs">
-          <Autocomplete
-            onSelect={onSelectPrinterCapability}
-            suggestions={(printerCapabilities || [])
-              ?.filter((printerCapability) => printerCapability.capabilityId)
-              .map((printerCapability) => ({
-                key: printerCapability.capabilityId!,
-                label: `${printerCapability.printType}, ${printerCapability.volumeCapacity}`,
-              }))}
-          />
-          <button
-            type="button"
-            className="btn"
-            onClick={() => capabilityModalRef.current?.showModal()}
-          >
-            +
-          </button>
-        </div>
-
-        <button type="submit" className="btn btn-primary mt-4">
-          Add Printer
-        </button>
-      </form>
-      <dialog id="add_location_modal" className="modal" ref={localtionModalRef}>
-        <div className="bg-white p-4 rounded-sm relative">
-          <AddLocation />
-          <div className="modal-action">
-            <form method="dialog">
-              <button className="btn absolute top-1 right-1">x</button>
-            </form>
-          </div>
-        </div>
-      </dialog>
-
-      <dialog
-        id="add_location_modal"
-        className="modal"
-        ref={capabilityModalRef}
-      >
-        <div className="bg-white p-4 rounded-sm relative">
-          <AddPrinterCapability />
-          <div className="modal-action">
-            <form method="dialog">
-              <button className="btn absolute top-1 right-1">x</button>
-            </form>
-          </div>
-        </div>
-      </dialog>
+      <Dialog>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="p-8">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Printer Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="printer name" {...field} />
+                  </FormControl>
+                  <FormDescription>The printer name</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="locationId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Printer Location</FormLabel>
+                  <div className="flex">
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select printer location" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {locations?.map((location) => (
+                          <SelectItem
+                            value={location.locationId!}
+                          >{`${location.address} ${location.city}`}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <DialogTrigger className="px-2">
+                      <span onClick={() => setSelectedForm("location")}>+</span>
+                    </DialogTrigger>
+                  </div>
+                  <FormDescription>Select printer location</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="capabilityId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Printer Spec</FormLabel>
+                  <div className="flex">
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select printer spec" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {printerCapabilities?.map((cap) => (
+                          <SelectItem
+                            value={cap.capabilityId!}
+                          >{`${cap.printType} ${cap.volumeCapacity}`}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <DialogTrigger className="px-2">
+                      <span onClick={() => setSelectedForm("cap")}>+</span>
+                    </DialogTrigger>
+                  </div>
+                  <FormDescription>Select printer spec</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit">Add Order</Button>
+          </form>
+        </Form>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add a new one</DialogTitle>
+          </DialogHeader>
+          {selectedForm === "location" && <LocationForm />}
+          {selectedForm === "cap" && <PrinterCapabilityForm />}
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

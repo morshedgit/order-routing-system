@@ -4,7 +4,7 @@
 import React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { API_PRINTER_URL } from "@/common/constants";
-import { LocationData } from "../add-location/page";
+import { LocationData } from "../add-location/location-form";
 
 const fetchLocations = async (): Promise<LocationData[]> => {
   const response = await fetch(`${API_PRINTER_URL}/locations`);

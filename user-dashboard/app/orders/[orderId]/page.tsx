@@ -1,7 +1,7 @@
 "use client";
 import { API_ORDER_URL } from "@/common/constants";
 import { useQuery } from "@tanstack/react-query";
-import OrderProgressComponent from "./OrderProgressComponent";
+import OrderProgressComponent from "./order-progress";
 
 export interface OrderProgress {
   orderId: string;
@@ -13,7 +13,7 @@ export interface Order {
   orderId: string;
   customerId: string;
   specificationsId: string;
-  customer: Customer;
+  customer?: Customer | null;
   specifications: Specifications;
   status: string | null;
   createdAt: string;

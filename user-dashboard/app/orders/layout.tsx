@@ -1,6 +1,6 @@
 "use client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import ViewOrders from "./ViewOrders";
+import ViewOrders from "./view-orders";
 import Link from "next/link";
 import { ModeToggle } from "@/components/mode-toggle";
 

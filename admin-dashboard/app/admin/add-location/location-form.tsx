@@ -1,4 +1,4 @@
-// pages/admin/add-printer-capability.tsx
+// pages/admin/add-location.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -20,15 +20,15 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 // Mutation function with typed input and output
-const addPrinterCapability = async (
-  printerCapability: PrinterCapabilityData
-): Promise<PrinterCapabilityResponse> => {
-  const response = await fetch(`${API_PRINTER_URL}/printer-capabilities`, {
+const LocationForm = async (
+  location: LocationData
+): Promise<LocationResponse> => {
+  const response = await fetch(`${API_PRINTER_URL}/locations`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(printerCapability),
+    body: JSON.stringify(location),
   });
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -36,59 +36,55 @@ const addPrinterCapability = async (
   return response.json();
 };
 
-// Define the type for your printerCapability data
-export interface PrinterCapabilityData {
-  capabilityId?: string;
-  printType: string;
-  volumeCapacity: number;
+// Define the type for your location data
+export interface LocationData {
+  locationId?: string;
+  address: string;
+  city: string;
   createdAt?: string;
   updatedAt?: string;
 }
 
 // Define the type for the response data
-interface PrinterCapabilityResponse {
+interface LocationResponse {
   message: string;
 }
 
 // Define a type for the error
-interface PrinterCapabilityError {
+interface LocationError {
   message: string;
 }
 
 const formSchema = z.object({
-  printType: z.string().min(2).max(50),
-  volumeCapacity: z.number().min(2).max(50),
+  address: z.string().min(2).max(50),
+  city: z.string().min(2).max(50),
 });
 
-const PrinterCapabilityForm: React.FC = () => {
+const AddLocation: React.FC = () => {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      printType: "",
-      volumeCapacity: 0,
+      address: "",
+      city: "",
     },
   });
 
   const queryClient = useQueryClient();
 
   // useMutation hook with TypeScript typing
-  const mutation = useMutation<
-    PrinterCapabilityResponse,
-    PrinterCapabilityError,
-    PrinterCapabilityData
-  >({
-    mutationFn: addPrinterCapability,
+  const mutation = useMutation<LocationResponse, LocationError, LocationData>({
+    mutationFn: LocationForm,
     onSuccess: (data) => {
       // Handle successful mutation here
-      console.log("PrinterCapability added successfully:", data.message);
+      console.log("Location added successfully:", data.message);
 
       // Refetch printers after a successful deletion
-      queryClient.invalidateQueries({ queryKey: ["printer-capabilities"] });
+      queryClient.invalidateQueries({ queryKey: ["locations"] });
     },
     onError: (error) => {
       // Handle error here
-      console.error("Error adding printerCapability:", error.message);
+      console.error("Error adding location:", error.message);
     },
   });
 
@@ -102,28 +98,28 @@ const PrinterCapabilityForm: React.FC = () => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="printType"
+          name="address"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Size</FormLabel>
               <FormControl>
-                <Input placeholder="Print Type" {...field} />
+                <Input placeholder="Address" {...field} />
               </FormControl>
-              <FormDescription>The Print Type</FormDescription>
+              <FormDescription>The Address</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
-          name="volumeCapacity"
+          name="city"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Size</FormLabel>
               <FormControl>
-                <Input placeholder="Volume Capacity" {...field} />
+                <Input placeholder="order city" {...field} />
               </FormControl>
-              <FormDescription>The Volume Capacity</FormDescription>
+              <FormDescription>The order city</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -134,4 +130,4 @@ const PrinterCapabilityForm: React.FC = () => {
   );
 };
 
-export default PrinterCapabilityForm;
+export default AddLocation;

@@ -41,7 +41,7 @@ const OrderProgressComponent: React.FC<{ orderProgress: OrderProgress }> = ({
           <strong>Order ID:</strong> {orderProgress.orderId}
         </p>
         <p>
-          <strong>Customer:</strong> {orderProgress.order?.customer.name}
+          <strong>Customer:</strong> {orderProgress.order?.customer?.name}
         </p>
         <p>
           <strong>Specifications:</strong>

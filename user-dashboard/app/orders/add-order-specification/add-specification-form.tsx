@@ -12,11 +12,43 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { API_ORDER_URL } from "@/common/constants";
+
+const addSpecification = async (
+  spec: OrderSpecificationData
+): Promise<SpecificationResponse> => {
+  const response = await fetch(`${API_ORDER_URL}/order-specifications`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(spec),
+  });
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+};
+
+interface SpecificationResponse {
+  message: string;
+}
+
+interface SpecificationError {
+  message: string;
+}
+
+interface OrderSpecificationData {
+  size: string;
+  paperType: string;
+  quantity: number;
+}
 
 const formSchema = z.object({
   size: z.string().min(2).max(50),
   paperType: z.string().min(2).max(50),
-  quantity: z.string().min(2).max(50),
+  quantity: z.number().min(1).max(50),
 });
 
 export function SpecificationForm() {
@@ -26,15 +58,33 @@ export function SpecificationForm() {
     defaultValues: {
       size: "",
       paperType: "",
-      quantity: "",
+      quantity: 0,
+    },
+  });
+
+  const queryClient = useQueryClient();
+
+  const specificationMutation = useMutation<
+    SpecificationResponse,
+    SpecificationError,
+    OrderSpecificationData
+  >({
+    mutationFn: addSpecification,
+    onSuccess: (data) => {
+      console.log("Specification added successfully:", data.message);
+      // Perform any additional actions on success
+
+      // Refetch printers after a successful deletion
+      queryClient.invalidateQueries({ queryKey: ["order-specifications"] });
+    },
+    onError: (error) => {
+      console.error("Error adding specification:", error.message);
     },
   });
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    specificationMutation.mutate(values);
   }
   return (
     <Form {...form}>
