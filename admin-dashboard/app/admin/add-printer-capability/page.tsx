@@ -105,7 +105,7 @@ const PrinterCapabilityForm: React.FC = () => {
           name="printType"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Size</FormLabel>
+              <FormLabel>Type</FormLabel>
               <FormControl>
                 <Input placeholder="Print Type" {...field} />
               </FormControl>
@@ -119,7 +119,7 @@ const PrinterCapabilityForm: React.FC = () => {
           name="volumeCapacity"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Size</FormLabel>
+              <FormLabel>Capacity</FormLabel>
               <FormControl>
                 <Input placeholder="Volume Capacity" {...field} />
               </FormControl>

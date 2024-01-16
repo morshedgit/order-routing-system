@@ -101,7 +101,7 @@ const AddLocation: React.FC = () => {
           name="address"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Size</FormLabel>
+              <FormLabel>Address</FormLabel>
               <FormControl>
                 <Input placeholder="Address" {...field} />
               </FormControl>
@@ -115,7 +115,7 @@ const AddLocation: React.FC = () => {
           name="city"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Size</FormLabel>
+              <FormLabel>City</FormLabel>
               <FormControl>
                 <Input placeholder="order city" {...field} />
               </FormControl>
