@@ -1,6 +1,5 @@
 package com.samyar.pricing.models;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -11,21 +10,20 @@ import org.hibernate.annotations.UpdateTimestamp;
 import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 
-
 @Entity
-@Table(name = "CostEstimates", schema = "pricing")
-public class CostEstimate extends PanacheEntityBase {
+@Table(name = "SizeWithPricing", schema = "pricing")
+public class SizeWithPricing extends PanacheEntityBase {
 
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
-    private UUID estimateId;
-
-    @Column(columnDefinition = "uuid")
-    private UUID orderId;
-
-    private BigDecimal cost;
+    private UUID sizePricingId;
+    
+    private String sizeLabel;
+    private String sizeDescription;
+    private double sizeRelativePricing; 
+    private double sizeFixedPricing; 
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -39,28 +37,44 @@ public class CostEstimate extends PanacheEntityBase {
 
     private UUID updatedBy;
 
-    public UUID getEstimateId() {
-        return estimateId;
+    public UUID getId() {
+        return sizePricingId;
     }
 
-    public void setEstimateId(UUID estimateId) {
-        this.estimateId = estimateId;
+    public void setId(UUID id) {
+        this.sizePricingId = id;
     }
 
-    public UUID getOrderId() {
-        return orderId;
+    public String getSizeLabel() {
+        return sizeLabel;
     }
 
-    public void setOrderId(UUID orderId) {
-        this.orderId = orderId;
+    public void setSizeLabel(String sizeLabel) {
+        this.sizeLabel = sizeLabel;
     }
 
-    public BigDecimal getCost() {
-        return cost;
+    public String getSizeDescription() {
+        return sizeDescription;
     }
 
-    public void setCost(BigDecimal cost) {
-        this.cost = cost;
+    public void setSizeDescription(String sizeDescription) {
+        this.sizeDescription = sizeDescription;
+    }
+
+    public double getSizeRelativePricing() {
+        return sizeRelativePricing;
+    }
+
+    public void setSizeRelativePricing(double sizeRelativePricing) {
+        this.sizeRelativePricing = sizeRelativePricing;
+    }
+
+    public double getSizeFixedPricing() {
+        return sizeFixedPricing;
+    }
+
+    public void setSizeFixedPricing(double sizeFixedPricing) {
+        this.sizeFixedPricing = sizeFixedPricing;
     }
 
     public OffsetDateTime getCreatedAt() {
@@ -94,7 +108,6 @@ public class CostEstimate extends PanacheEntityBase {
     public void setUpdatedBy(UUID updatedBy) {
         this.updatedBy = updatedBy;
     }
-
-    // Getters and Setters
+    
     
 }

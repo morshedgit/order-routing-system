@@ -61,19 +61,19 @@ services:
       - kafka
       - postgres-db
 
-  order-service:
-    build:
-      context: ./order-management-service
-    ports:
-      - "8082:8082"
-    environment:
-      - JAVA_OPTS_APPEND=-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager
-    # Uncomment the following lines if you need live code updates without rebuilding the container
-    # volumes:
-    #   - ./src:/deployments/src
-    depends_on:
-      - kafka
-      - postgres-db
+  # order-service:
+  #   build:
+  #     context: ./order-management-service
+  #   ports:
+  #     - "8082:8082"
+  #   environment:
+  #     - JAVA_OPTS_APPEND=-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager
+  #   # Uncomment the following lines if you need live code updates without rebuilding the container
+  #   # volumes:
+  #   #   - ./src:/deployments/src
+  #   depends_on:
+  #     - kafka
+  #     - postgres-db
 
   printer-service:
     build:

@@ -1,6 +1,5 @@
 package com.samyar.pricing.models;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -11,21 +10,18 @@ import org.hibernate.annotations.UpdateTimestamp;
 import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 
-
 @Entity
-@Table(name = "CostEstimates", schema = "pricing")
-public class CostEstimate extends PanacheEntityBase {
+@Table(name = "QuantityWithPricing", schema = "pricing")
+public class QuantityWithPricing extends PanacheEntityBase {
 
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
-    private UUID estimateId;
-
-    @Column(columnDefinition = "uuid")
-    private UUID orderId;
-
-    private BigDecimal cost;
+    private UUID quantityPricingId;
+    
+    private int quantityThreshold;
+    private double price; 
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -39,28 +35,28 @@ public class CostEstimate extends PanacheEntityBase {
 
     private UUID updatedBy;
 
-    public UUID getEstimateId() {
-        return estimateId;
+    public UUID getQuantityPricingId() {
+        return quantityPricingId;
     }
 
-    public void setEstimateId(UUID estimateId) {
-        this.estimateId = estimateId;
+    public void setQuantityPricingId(UUID quantityPricingId) {
+        this.quantityPricingId = quantityPricingId;
     }
 
-    public UUID getOrderId() {
-        return orderId;
+    public int getQuantityThreshold() {
+        return quantityThreshold;
     }
 
-    public void setOrderId(UUID orderId) {
-        this.orderId = orderId;
+    public void setQuantityThreshold(int quantityThreshold) {
+        this.quantityThreshold = quantityThreshold;
     }
 
-    public BigDecimal getCost() {
-        return cost;
+    public double getPrice() {
+        return price;
     }
 
-    public void setCost(BigDecimal cost) {
-        this.cost = cost;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public OffsetDateTime getCreatedAt() {
@@ -95,6 +91,5 @@ public class CostEstimate extends PanacheEntityBase {
         this.updatedBy = updatedBy;
     }
 
-    // Getters and Setters
     
 }

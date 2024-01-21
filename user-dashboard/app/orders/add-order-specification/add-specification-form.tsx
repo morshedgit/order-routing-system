@@ -108,9 +108,16 @@ export function SpecificationForm() {
           name="quantity"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Size</FormLabel>
+              <FormLabel>Quantity</FormLabel>
               <FormControl>
-                <Input placeholder="order quantity" {...field} />
+                <Input
+                  type="number"
+                  placeholder="order quantity"
+                  {...field}
+                  onChange={(e) =>
+                    field.onChange(parseInt(e.target.value) || 0)
+                  }
+                />
               </FormControl>
               <FormDescription>The order quantity</FormDescription>
               <FormMessage />
@@ -122,7 +129,7 @@ export function SpecificationForm() {
           name="paperType"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Size</FormLabel>
+              <FormLabel>Type</FormLabel>
               <FormControl>
                 <Input placeholder="paper type" {...field} />
               </FormControl>

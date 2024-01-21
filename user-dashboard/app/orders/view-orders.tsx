@@ -2,27 +2,14 @@
 "use client";
 
 import React from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { API_ORDER_URL } from "@/common/constants";
 import { OrderSpecification } from "./order-specifications/page";
-import {
-  AlertCircle,
-  Archive,
-  ArchiveX,
-  File,
-  Inbox,
-  MessagesSquare,
-  PenBox,
-  Search,
-  Send,
-  ShoppingCart,
-  Trash2,
-  Users2,
-} from "lucide-react";
-import { SideNav } from "./side-nav";
+import { File } from "lucide-react";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { SideNav } from "@/components/side-nav";
 
-interface Order {
+export interface Order {
   orderId: string;
   customerId: string;
   specificationsId: string;

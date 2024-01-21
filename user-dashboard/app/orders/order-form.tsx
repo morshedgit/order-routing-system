@@ -38,7 +38,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-const CUSTOMER_ID = "d79e39b8-e631-4591-aab0-ddfdbb52b3e9";
+const CUSTOMER_ID = "4a8737bc-beb4-4f27-87d9-8f804d6538d2";
 
 interface OrderResponse {
   message: string;
