@@ -3,11 +3,12 @@
 
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { API_ORDER_URL } from "@/common/constants";
+import { API_AUTH_URL, API_ORDER_URL } from "@/common/constants";
 import { OrderSpecification } from "./order-specifications/page";
 import { File } from "lucide-react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SideNav } from "@/components/side-nav";
+import { httpService } from "@/common/services/http";
 
 export interface Order {
   orderId: string;
@@ -17,7 +18,7 @@ export interface Order {
 }
 
 const fetchOrders = async (): Promise<Order[]> => {
-  const response = await fetch(`${API_ORDER_URL}/orders`);
+  const response = await httpService(`${API_ORDER_URL}/orders`);
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
@@ -32,6 +33,7 @@ const ViewOrders = () => {
   } = useQuery<Order[]>({
     queryKey: ["orders"],
     queryFn: fetchOrders,
+    retry: false,
   });
 
   if (isLoading) return <div>Loading...</div>;

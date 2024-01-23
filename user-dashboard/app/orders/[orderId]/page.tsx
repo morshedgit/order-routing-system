@@ -2,6 +2,7 @@
 import { API_ORDER_URL } from "@/common/constants";
 import { useQuery } from "@tanstack/react-query";
 import OrderProgressComponent from "./order-progress";
+import { httpService } from "@/common/services/http";
 
 export interface OrderProgress {
   orderId: string;
@@ -60,7 +61,7 @@ export interface Location {
 }
 
 const fetchOrderProgress = async (orderId: string): Promise<OrderProgress> => {
-  const response = await fetch(
+  const response = await httpService(
     `${API_ORDER_URL}/orders/${orderId}/order-progress`
   );
   if (!response.ok) {

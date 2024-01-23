@@ -8,6 +8,7 @@ import com.samyar.printer.models.Printer;
 import io.quarkus.hibernate.reactive.panache.Panache;
 import io.quarkus.panache.common.Sort;
 import io.smallrye.mutiny.Uni;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -21,6 +22,7 @@ import jakarta.ws.rs.core.MediaType;
 import static jakarta.ws.rs.core.Response.Status.*;
 
 @Path("/printers")
+@RolesAllowed("member")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class PrinterResource {

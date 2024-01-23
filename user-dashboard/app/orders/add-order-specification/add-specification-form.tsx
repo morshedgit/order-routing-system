@@ -14,11 +14,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { API_ORDER_URL } from "@/common/constants";
+import { httpService } from "@/common/services/http";
 
 const addSpecification = async (
   spec: OrderSpecificationData
 ): Promise<SpecificationResponse> => {
-  const response = await fetch(`${API_ORDER_URL}/order-specifications`, {
+  const response = await httpService(`${API_ORDER_URL}/order-specifications`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

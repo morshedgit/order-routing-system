@@ -18,12 +18,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { httpService } from "@/common/services/http";
 
 // Mutation function with typed input and output
 const LocationForm = async (
   location: LocationData
 ): Promise<LocationResponse> => {
-  const response = await fetch(`${API_PRINTER_URL}/locations`, {
+  const response = await httpService(`${API_PRINTER_URL}/locations`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

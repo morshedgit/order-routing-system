@@ -18,18 +18,22 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { httpService } from "@/common/services/http";
 
 // Mutation function with typed input and output
 const addPrinterCapability = async (
   printerCapability: PrinterCapabilityData
 ): Promise<PrinterCapabilityResponse> => {
-  const response = await fetch(`${API_PRINTER_URL}/printer-capabilities`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(printerCapability),
-  });
+  const response = await httpService(
+    `${API_PRINTER_URL}/printer-capabilities`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(printerCapability),
+    }
+  );
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }

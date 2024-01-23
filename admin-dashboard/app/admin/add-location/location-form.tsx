@@ -23,7 +23,7 @@ import { Button } from "@/components/ui/button";
 const LocationForm = async (
   location: LocationData
 ): Promise<LocationResponse> => {
-  const response = await fetch(`${API_PRINTER_URL}/locations`, {
+  const response = await httpService(`${API_PRINTER_URL}/locations`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

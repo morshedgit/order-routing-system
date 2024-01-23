@@ -8,6 +8,7 @@ import { LocationData } from "../locations/add-location/location-form";
 import { File } from "lucide-react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SideNav } from "../../orders/side-nav";
+import { httpService } from "@/common/services/http";
 
 interface Printer {
   printerId: string;
@@ -16,7 +17,7 @@ interface Printer {
 }
 
 const fetchPrinters = async (): Promise<Printer[]> => {
-  const response = await fetch(`${API_PRINTER_URL}/printers`);
+  const response = await httpService(`${API_PRINTER_URL}/printers`);
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }

@@ -4,6 +4,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { API_ORDER_URL } from "@/common/constants";
+import { httpService } from "@/common/services/http";
 
 export interface OrderSpecification {
   specificationsId: string;
@@ -13,7 +14,7 @@ export interface OrderSpecification {
 }
 
 const fetchSpecifications = async (): Promise<OrderSpecification[]> => {
-  const response = await fetch(`${API_ORDER_URL}/order-specifications`);
+  const response = await httpService(`${API_ORDER_URL}/order-specifications`);
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }

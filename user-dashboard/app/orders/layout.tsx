@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ViewOrders from "./view-orders";
 import Link from "next/link";
 import { ModeToggle } from "@/components/mode-toggle";
+import { useAuthHook } from "@/common/hooks/auth";
 
 const queryClient = new QueryClient();
 
@@ -11,6 +12,7 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  useAuthHook();
   return (
     <QueryClientProvider client={queryClient}>
       <header className="w-full flex p-4 border-b-solid border-b-2">

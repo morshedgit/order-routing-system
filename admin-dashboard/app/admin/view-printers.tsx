@@ -14,7 +14,7 @@ interface Printer {
 }
 
 const fetchPrinters = async (): Promise<Printer[]> => {
-  const response = await fetch(`${API_PRINTER_URL}/printers`);
+  const response = await httpService(`${API_PRINTER_URL}/printers`);
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
@@ -22,7 +22,7 @@ const fetchPrinters = async (): Promise<Printer[]> => {
 };
 
 const deletePrinter = async (id: string): Promise<void> => {
-  const response = await fetch(`${API_PRINTER_URL}/printers/${id}`, {
+  const response = await httpService(`${API_PRINTER_URL}/printers/${id}`, {
     method: "DELETE",
   });
   if (!response.ok) {

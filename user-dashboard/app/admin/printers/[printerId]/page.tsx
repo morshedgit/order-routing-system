@@ -7,6 +7,7 @@ import { API_PRINTER_URL } from "@/common/constants";
 import { LocationData } from "../../locations/add-location/location-form";
 import { PrinterCapabilityData } from "../../printer-capabilities/add-printer-capability/page";
 import PrinterForm, { PrinterFormValue } from "../printer-form";
+import { httpService } from "@/common/services/http";
 
 // Define the type for the response data
 interface PrinterResponse {
@@ -27,7 +28,7 @@ interface PrinterData {
 
 async function fetchLocations(): Promise<LocationData[]> {
   // Fetch locations from your API
-  const response = await fetch(`${API_PRINTER_URL}/locations`); // Adjust API endpoint as needed
+  const response = await httpService(`${API_PRINTER_URL}/locations`); // Adjust API endpoint as needed
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
@@ -36,7 +37,7 @@ async function fetchLocations(): Promise<LocationData[]> {
 
 async function fetchPrinterCapabilities(): Promise<PrinterCapabilityData[]> {
   // Fetch locations from your API
-  const response = await fetch(`${API_PRINTER_URL}/printer-capabilities`); // Adjust API endpoint as needed
+  const response = await httpService(`${API_PRINTER_URL}/printer-capabilities`); // Adjust API endpoint as needed
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
@@ -44,7 +45,9 @@ async function fetchPrinterCapabilities(): Promise<PrinterCapabilityData[]> {
 }
 
 const fetchPrinter = async (printerId: string): Promise<PrinterData> => {
-  const response = await fetch(`${API_PRINTER_URL}/printers/${printerId}`);
+  const response = await httpService(
+    `${API_PRINTER_URL}/printers/${printerId}`
+  );
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
@@ -52,7 +55,7 @@ const fetchPrinter = async (printerId: string): Promise<PrinterData> => {
 };
 
 const deletePrinter = async (id: string): Promise<void> => {
-  const response = await fetch(`${API_PRINTER_URL}/printers/${id}`, {
+  const response = await httpService(`${API_PRINTER_URL}/printers/${id}`, {
     method: "DELETE",
   });
   if (!response.ok) {
@@ -63,7 +66,7 @@ const deletePrinter = async (id: string): Promise<void> => {
 // Assuming you have a function to submit printer data
 async function editPrinter(printerData: PrinterData): Promise<PrinterResponse> {
   // Submit printer data to your API
-  const response = await fetch(`${API_PRINTER_URL}/printers`, {
+  const response = await httpService(`${API_PRINTER_URL}/printers`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

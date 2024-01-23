@@ -9,9 +9,10 @@ import {
 import { API_ORDER_URL } from "@/common/constants";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { httpService } from "@/common/services/http";
 
 const deleteOrder = async (id: string): Promise<void> => {
-  const response = await fetch(`${API_ORDER_URL}/orders/${id}`, {
+  const response = await httpService(`${API_ORDER_URL}/orders/${id}`, {
     method: "DELETE",
   });
   if (!response.ok) {

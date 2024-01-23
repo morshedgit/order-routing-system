@@ -37,6 +37,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { httpService } from "@/common/services/http";
 
 const CUSTOMER_ID = "4a8737bc-beb4-4f27-87d9-8f804d6538d2";
 
@@ -60,7 +61,7 @@ const formSchema = z.object({
 // Assuming you have a function to fetch orderSpecifications
 async function fetchOrderSpecifications(): Promise<OrderSpecification[]> {
   // Fetch orderSpecifications from your API
-  const response = await fetch(`${API_ORDER_URL}/order-specifications`); // Adjust API endpoint as needed
+  const response = await httpService(`${API_ORDER_URL}/order-specifications`); // Adjust API endpoint as needed
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
@@ -68,7 +69,7 @@ async function fetchOrderSpecifications(): Promise<OrderSpecification[]> {
 }
 
 const addOrder = async (order: OrderData): Promise<OrderResponse> => {
-  const response = await fetch(`${API_ORDER_URL}/orders`, {
+  const response = await httpService(`${API_ORDER_URL}/orders`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

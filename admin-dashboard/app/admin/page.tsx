@@ -57,7 +57,7 @@ const formSchema = z.object({
 
 async function fetchLocations(): Promise<LocationData[]> {
   // Fetch locations from your API
-  const response = await fetch(`${API_PRINTER_URL}/locations`); // Adjust API endpoint as needed
+  const response = await httpService(`${API_PRINTER_URL}/locations`); // Adjust API endpoint as needed
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
@@ -66,7 +66,7 @@ async function fetchLocations(): Promise<LocationData[]> {
 
 async function fetchPrinterCapabilities(): Promise<PrinterCapabilityData[]> {
   // Fetch locations from your API
-  const response = await fetch(`${API_PRINTER_URL}/printer-capabilities`); // Adjust API endpoint as needed
+  const response = await httpService(`${API_PRINTER_URL}/printer-capabilities`); // Adjust API endpoint as needed
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
@@ -76,7 +76,7 @@ async function fetchPrinterCapabilities(): Promise<PrinterCapabilityData[]> {
 // Assuming you have a function to submit printer data
 async function addPrinter(printerData: PrinterData): Promise<PrinterResponse> {
   // Submit printer data to your API
-  const response = await fetch(`${API_PRINTER_URL}/printers`, {
+  const response = await httpService(`${API_PRINTER_URL}/printers`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
